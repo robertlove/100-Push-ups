@@ -1,14 +1,15 @@
-<ion-header>
+<!--ion-header>
   <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+    <ion-title>100 Push-ups</ion-title>
   </ion-navbar>
-</ion-header>
+</ion-header-->
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <div style="width:200px;height:200px;margin:16px auto 32px auto">
+    <countdown></countdown>
+  </div>
+  <button ion-button block [disabled]="countdownComponent.isRunning||countdownComponent.isPaused" (click)="countdownStart()">Start</button>
+  <button ion-button block [disabled]="!countdownComponent.isRunning" (click)="countdownPause()">Pause</button>
+  <button ion-button block [disabled]="!countdownComponent.isPaused" (click)="countdownResume()">Resume</button>
+  <button ion-button block [disabled]="!countdownComponent.isStarted" (click)="countdownCancel()">Cancel</button>
 </ion-content>

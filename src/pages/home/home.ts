@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { CountdownComponent } from '../../components/countdown/countdown';
 
 @Component({
   selector: 'page-home',
@@ -7,8 +8,24 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  @ViewChild(CountdownComponent) countdownComponent: CountdownComponent
 
+  constructor(public navCtrl: NavController) {}
+
+  countdownCancel(): void {
+    this.countdownComponent.cancel();
+  }
+
+  countdownPause(): void {
+    this.countdownComponent.pause();
+  }
+
+  countdownResume(): void {
+    this.countdownComponent.resume();
+  }
+
+  countdownStart(): void {
+    this.countdownComponent.start();
   }
 
 }
