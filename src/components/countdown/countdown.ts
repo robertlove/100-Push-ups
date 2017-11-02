@@ -9,6 +9,12 @@ export class CountdownComponent {
 
   @ViewChild('canvas') canvasElement : ElementRef;
 
+  @Input('background-color') backgroundColor: string = 'transparent';
+
+  @Input('background-line-color') backgroundLineColor: string = 'rgba(72, 138, 255, 0.4)';
+
+  @Input('font-color') fontColor: string = 'black';
+
   @Input('font-family') fontFamily: string = '"Roboto", "Helvetica Neue", sans-serif';
 
   @Input('font-size') fontSize: number = 30;
@@ -21,15 +27,17 @@ export class CountdownComponent {
 
   @Input('fps') fps: number = 60;
 
-  @Input('height') height: number = 200;
+  @Input('height') height: number = 250;
 
   @Input('line-cap') lineCap: string = 'round';
 
-  @Input('line-width') lineWidth: number = 10;
+  @Input('line-color') lineColor: string = '#488aff';
+
+  @Input('line-width') lineWidth: number = 15;
 
   @Input('seconds') seconds: number = 60;
 
-  @Input('width') width: number = 200;
+  @Input('width') width: number = 250;
 
   @Output() cancelled: EventEmitter<any> = new EventEmitter();
 
@@ -45,15 +53,21 @@ export class CountdownComponent {
 
   private context: any;
 
-  private count: number = 0;
-
   private delay: number;
 
   private eAngle: number = 1.5;
 
   private fontSizeAsPx: number;
 
+  private fpsMax: number = 60;
+
+  private fpsMin: number = 1;
+
   private interval: any;
+
+  private intervalCount: number = 0;
+
+  private intervalsRemaining: number;
 
   private isCancelled: boolean = false;
 
@@ -67,19 +81,23 @@ export class CountdownComponent {
 
   private isStarted: boolean = false;
 
-  private millisecondsRemaining: number;
-
-  private r: number = 135;
+  private r: number;
 
   private sAngle: number = 3.5;
 
+  private secondsDefault: number = 60;
+
   private secondsRemaining: number;
 
-  private size: number = 300;
+  private size: number;
 
-  private x: number = 150;
+  private textBaseline: string = 'middle';
 
-  private y: number = 150;
+  private textAlign: string = 'center';
+
+  private x: number;
+
+  private y: number;
 
   constructor() {}
 
@@ -88,87 +106,110 @@ export class CountdownComponent {
   }
 
   cancel(): void {
-    this.cancelled.emit(this);
     clearInterval(this.interval);
+    this.isCancelled = true;
+    this.isFinished = false;
+    this.isPaused = false;
+    this.isResumed = false;
+    this.isRunning = false;
+    this.isStarted = false;
     this.init();
+    this.cancelled.emit(this);
   }
 
   pause(): void {
     if (this.isRunning) {
-      this.paused.emit(this);
       clearInterval(this.interval);
+      this.isCancelled = false;
+      this.isFinished = false;
       this.isPaused = true;
       this.isResumed = false;
       this.isRunning = false;
+      this.isStarted = true;
+      this.paused.emit(this);
     }
   }
 
   resume(): void {
     if (!this.isRunning) {
-      this.resumed.emit(this);
-      this.run();
+      this.isCancelled = false;
+      this.isFinished = false;
       this.isPaused = false;
       this.isResumed = true;
       this.isRunning = true;
+      this.isStarted = true;
+      this.run();
+      this.resumed.emit(this);
     }
   }
 
   start(): void {
     if (!this.isRunning) {
-      this.started.emit(this);
-      this.run();
+      this.isCancelled = false;
+      this.isFinished = false;
       this.isPaused = false;
+      this.isResumed = false;
       this.isRunning = true;
       this.isStarted = true;
+      this.run();
+      this.started.emit(this);
     }
   }
 
   private draw(): void {
 
-    let eAngle = ((2 / this.seconds) * this.count) + this.eAngle;
+    let eAngle = ((2 / this.seconds) * (this.intervalCount / this.fps)) + this.eAngle;
 
     this.context.clearRect(0, 0, this.width, this.height);
 
     this.context.beginPath();
     this.context.arc(this.x, this.y, this.r, this.sAngle * Math.PI, this.eAngle * Math.PI, true);
-    this.context.fillStyle = '#fff';
+    this.context.fillStyle = this.backgroundColor;
     this.context.fill();
 
     this.context.beginPath();
     this.context.arc(this.x, this.y, this.r, this.sAngle * Math.PI, this.eAngle * Math.PI, true);
     this.context.lineWidth = this.lineWidth;
-    this.context.strokeStyle = '#f4f4f4';
+    this.context.strokeStyle = this.backgroundLineColor;
     this.context.stroke();
 
     this.context.beginPath();
     this.context.arc(this.x, this.y, this.r, this.sAngle * Math.PI, eAngle * Math.PI, true);
     this.context.lineCap = this.lineCap;
     this.context.lineWidth = this.lineWidth;
-    this.context.strokeStyle = '#488aff';
+    this.context.strokeStyle = this.lineColor;
     this.context.stroke();
 
     this.context.font = `${this.fontStyle} ${this.fontVariant} ${this.fontWeight} ${this.fontSizeAsPx}px ${this.fontFamily}`;
-    this.context.textBaseline = 'middle';
-    this.context.textAlign = 'center';
-    this.context.fillStyle = '#000';
+    this.context.textBaseline = this.textBaseline;
+    this.context.textAlign = this.textAlign;
+    this.context.fillStyle = this.fontColor;
     this.context.fillText(this.secondsRemaining, this.x, this.y);
 
   }
 
   private init(): void {
-    this.isCancelled = false;
-    this.isFinished = false;
-    this.isPaused = false;
-    this.isResumed = false;
-    this.isRunning = false;
-    this.isStarted = false;
 
-    this.count = 0;
+    if (isNaN(this.seconds) || this.seconds <= 0) {
+      this.seconds = this.secondsDefault;
+    }
+
+    if (isNaN(this.fps)) {
+      this.fps = this.fpsMax;
+    }
+
+    if (this.fps < this.fpsMin) {
+      this.fps = this.fpsMin;
+    }
+
+    if (this.fps > this.fpsMax) {
+      this.fps = this.fpsMax;
+    }
+
+    this.intervalCount = 0;
     this.delay = 1000 / this.fps;
-    this.millisecondsRemaining = this.seconds * 1000;
+    this.intervalsRemaining = this.fps * this.seconds;
     this.secondsRemaining = this.seconds;
-
-    console.log(this.millisecondsRemaining + ' / ' + this.secondsRemaining);
 
     this.size = Math.min(this.height, this.width);
     this.fontSizeAsPx = this.fontSize / 100 * this.size;
@@ -179,18 +220,19 @@ export class CountdownComponent {
     this.setCanvas();
     this.setContext();
     this.draw();
+
   }
 
   private run(): void {
     this.interval = setInterval(() => {
-      this.millisecondsRemaining = this.millisecondsRemaining - 1000;
-      this.secondsRemaining = this.millisecondsRemaining / 1000;
-      console.log(this.millisecondsRemaining + ' / ' + this.secondsRemaining);
-      this.count++;
+      this.intervalsRemaining--;
+      this.intervalCount++;
+      this.secondsRemaining = Math.ceil(this.intervalsRemaining / this.fps);
       this.draw();
-      if (this.secondsRemaining == 0) {
-        this.finished.emit(this);
+      if (this.intervalsRemaining == 0) {
         clearInterval(this.interval);
+        this.isFinished = true;
+        this.finished.emit(this);
       }
     }, this.delay);
   }

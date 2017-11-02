@@ -1,15 +1,21 @@
-<!--ion-header>
+<!-- <ion-header>
   <ion-navbar>
     <ion-title>100 Push-ups</ion-title>
   </ion-navbar>
-</ion-header-->
+</ion-header> -->
 
 <ion-content padding>
-  <div style="width:200px;height:200px;margin:16px auto 32px auto">
-    <countdown></countdown>
+  <div style="width:250px;height:250px;margin:16px auto 32px auto">
+    <countdown
+      (cancelled)="onCountdownCancelled($event)"
+      (finished)="onCountdownFinished($event)"
+      (paused)="onCountdownPaused($event)"
+      (resumed)="onCountdownResumed($event)"
+      (started)="onCountdownStarted($event)"
+    ></countdown>
   </div>
   <button ion-button block [disabled]="countdownComponent.isRunning||countdownComponent.isPaused" (click)="countdownStart()">Start</button>
-  <button ion-button block [disabled]="!countdownComponent.isRunning" (click)="countdownPause()">Pause</button>
+  <button ion-button block [disabled]="!countdownComponent.isRunning||countdownComponent.isFinished" (click)="countdownPause()">Pause</button>
   <button ion-button block [disabled]="!countdownComponent.isPaused" (click)="countdownResume()">Resume</button>
   <button ion-button block [disabled]="!countdownComponent.isStarted" (click)="countdownCancel()">Cancel</button>
 </ion-content>

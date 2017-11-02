@@ -12,6 +12,26 @@ export class HomePage {
 
   constructor(public navCtrl: NavController) {}
 
+  onCountdownCancelled(countdown): void {
+    console.log('Countdown Cancelled:', countdown);
+  }
+
+  onCountdownFinished(countdown): void {
+    console.log('Countdown Finished:', countdown);
+  }
+
+  onCountdownPaused(countdown): void {
+    console.log('Countdown Paused:', countdown);
+  }
+
+  onCountdownResumed(countdown): void {
+    console.log('Countdown Resumed:', countdown);
+  }
+
+  onCountdownStarted(countdown): void {
+    console.log('Countdown Started:', countdown);
+  }
+
   countdownCancel(): void {
     this.countdownComponent.cancel();
   }
