@@ -1,11 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'countdown',
-  templateUrl: 'countdown.html'
+  selector: 'timer',
+  templateUrl: 'timer.html'
 })
 
-export class CountdownComponent {
+export class TimerComponent {
 
   @ViewChild('canvas') canvasElement : ElementRef;
 

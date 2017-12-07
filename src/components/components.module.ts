@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CountdownComponent } from './countdown/countdown';
+import { TimerComponent } from './timer/timer';
 @NgModule({
 	declarations: [
-    CountdownComponent
+    TimerComponent
 	],
 	imports: [],
 	exports: [
-    CountdownComponent
+    TimerComponent
 	]
 })
 export class ComponentsModule {}

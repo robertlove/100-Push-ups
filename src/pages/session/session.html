@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>100 Push-ups</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only menuToggle>
+        <ion-icon name="settings"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar text-center>
+    <ion-grid>
+      <ion-row>
+        <ion-col>Level: {{level}}</ion-col>
+        <ion-col>Week: {{week}}</ion-col>
+        <ion-col>Day: {{day}}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-slides pager>
+    <ng-template ngFor let-set [ngForOf]="sets" let-i="index">
+      <ion-slide>
+        <p margin>Set {{set.set}} of {{sets.length}}</p>
+        <p margin><small>Push-ups to perform</small></p>
+        <p margin style="font-size:75px">{{set.reps}}</p>
+        <p margin><img src="assets/activity.svg" style="width:50%"></p>
+      </ion-slide>
+      <ion-slide *ngIf="i < sets.length - 1">
+        <timer seconds="{{set.rest}}" line-width="4"></timer>
+      </ion-slide>
+    </ng-template>
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="secondary" text-center>
+    <button ion-button full color="secondary" (click)="next()">Done</button>
+  </ion-toolbar>
+</ion-footer>
