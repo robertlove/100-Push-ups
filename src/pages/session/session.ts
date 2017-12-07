@@ -1,5 +1,5 @@
 import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { IonicPage, NavController, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { SessionProvider } from '../../providers/session/session';
 import { TimerComponent } from '../../components/timer/timer';
 import { HomePage } from '../../pages/home/home';
@@ -13,47 +13,55 @@ import { HomePage } from '../../pages/home/home';
 
 export class SessionPage {
 
+  day: number;
+
   level: number;
 
-  week: number;
-
-  day: number;
+  progress: any;
 
   rest: number;
 
-  sets: any = null;
+  sets: any;
+
+  week: number;
 
   @ViewChild(Slides) slides: Slides;
 
   @ViewChildren(TimerComponent) timer: QueryList<TimerComponent>
 
-  constructor(private navCtrl: NavController, private session: SessionProvider) {
-    this.session.get(3, 2, 1).subscribe(
+  constructor(private navCtrl: NavController, private navParams: NavParams, private session: SessionProvider) {
+
+    this.progress = {
+      level: this.navParams.get('level'),
+      week: this.navParams.get('week'),
+      day: this.navParams.get('day')
+    };
+
+    this.session.get(this.progress).subscribe(
       data => {
-        console.log(data);
         this.level = data[0].level;
         this.week = data[0].week;
         this.day = data[0].day;
         this.rest = data[0].rest;
         this.sets = data;
-      },
-      error => {
-        console.error(error);
       }
     );
+
+    console.log('SessionPage', this);
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SessionPage');
-    //this.slides.lockSwipes(true);
     this.slides.paginationType = 'progress';
+    this.slides.lockSwipes(true);
   }
 
   isOdd(number) {
     return number % 2;
   }
 
-  next() {
+  submit() {
     // If we're finished
     if (this.slides.isEnd()) {
 
@@ -83,6 +91,10 @@ export class SessionPage {
       }
 
     }
+  }
+
+  onTimerFinished(timer) {
+    this.submit();
   }
 
 }

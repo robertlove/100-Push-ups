@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="dark">
     <ion-title>100 Push-ups</ion-title>
     <ion-buttons end>
       <button ion-button icon-only menuToggle>
@@ -10,5 +10,11 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button block (click)="goToSessionPage()">Session</button>
+  <p>Home</p>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary" text-center>
+    <button ion-button full (click)="submit()">Start</button>
+  </ion-toolbar>
+</ion-footer>

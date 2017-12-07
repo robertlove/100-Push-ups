@@ -6,22 +6,14 @@ import 'rxjs/add/operator/map';
 
 export class SessionProvider {
 
-  constructor(public http: Http) {
+  constructor(private http: Http) {
     console.log('Hello SessionProvider');
   }
 
-  get(level: number, week: number, day: number): any {
+  get(progress): any {
     return this.http.get('assets/sessions.json')
     .map(response => response.json())
-    .map(x => x.filter(y => y.level === level && y.week === week && y.day === day));
-  }
-
-  next(): any {
-    return;
-  }
-
-  prev(): any {
-    return;
+    .map(x => x.filter(y => y.level === progress.level && y.week === progress.week && y.day === progress.day));
   }
 
 }
