@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { SessionPage } from '../../pages/session/session';
-import { TestPage } from '../../pages/test/test';
+import { SessionsPage } from '../../pages/sessions/sessions';
+import { TestsPage } from '../../pages/tests/tests';
 
 @IonicPage()
 
@@ -31,8 +31,8 @@ export class HomePage {
       };
 
       if (progress !== null) {
-        let weekAndDay = {
-          weekAndDay: `$(progress.week)$(progress.day)`
+        weekAndDay = {
+          weekAndDay: `${progress.week}${progress.day}`
         };
       }
 
@@ -44,10 +44,10 @@ export class HomePage {
         case '43':
         case '53':
         case '63':
-          this.navCtrl.push(TestPage, weekAndDay);
+          this.navCtrl.push(TestsPage, weekAndDay);
           break;
         default:
-          this.navCtrl.push(SessionPage, progress);
+          this.navCtrl.push(SessionsPage, progress);
           break;
       }
 

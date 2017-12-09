@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { SessionPage } from '../../pages/session/session';
+import { SessionsPage } from '../../pages/sessions/sessions';
 
 @IonicPage()
 
 @Component({
-  selector: 'page-test',
-  templateUrl: 'test.html',
+  selector: 'page-tests',
+  templateUrl: 'tests.html',
 })
 
-export class TestPage {
+export class TestsPage {
 
-  private testForm: FormGroup;
+  private testsForm: FormGroup;
 
   heading: string = 'Exhaustion Test';
 
@@ -31,7 +31,7 @@ export class TestPage {
         break;
     }
 
-    this.testForm = formBuilder.group({
+    this.testsForm = formBuilder.group({
       number: [0, Validators.compose([
         Validators.required,
         Validators.minLength(1),
@@ -42,14 +42,14 @@ export class TestPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TestPage');
+    console.log('ionViewDidLoad TestsPage');
   }
 
   submit() {
 
-    let number = this.testForm.value.number;
+    let number = this.testsForm.value.number;
 
-    console.log('TestPage.submit number', number);
+    console.log('TestsPage.submit number', number);
 
     let progress = {
       level: 1,
@@ -58,18 +58,16 @@ export class TestPage {
     };
 
     if (number < 6) {
-      return this.navCtrl.push(SessionPage, progress);
+      return this.navCtrl.push(SessionsPage, progress);
     }
 
     if (number < 11) {
       progress.level = 2;
-      return this.navCtrl.push(SessionPage, progress);
+      return this.navCtrl.push(SessionsPage, progress);
     }
 
-    if (number < 21) {
-      progress.level = 3;
-      return this.navCtrl.push(SessionPage, progress);
-    }
+    progress.level = 3;
+    return this.navCtrl.push(SessionsPage, progress);
 
   }
 

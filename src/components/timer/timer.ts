@@ -11,7 +11,7 @@ export class TimerComponent {
 
   @Input('background-color') backgroundColor: string = 'transparent';
 
-  @Input('background-line-color') backgroundLineColor: string = 'rgba(72, 138, 255, 0.4)';
+  @Input('background-line-color') backgroundLineColor: string = 'rgb(191, 191, 191)';
 
   @Input('font-color') fontColor: string = 'black';
 
@@ -31,9 +31,9 @@ export class TimerComponent {
 
   @Input('line-cap') lineCap: string = 'round';
 
-  @Input('line-color') lineColor: string = '#488aff';
+  @Input('line-color') lineColor: string = '#0b6aff';
 
-  @Input('line-width') lineWidth: number = 15;
+  @Input('line-width') lineWidth: number = 4;
 
   @Input('seconds') seconds: number = 60;
 

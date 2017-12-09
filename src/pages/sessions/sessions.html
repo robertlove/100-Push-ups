@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>100 Push-ups</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>Level {{level}}</ion-col>
+        <ion-col>Week {{week}}</ion-col>
+        <ion-col>Day {{day}}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-slides pager>
+    <ng-template ngFor let-set [ngForOf]="sets" let-i="index">
+      <ion-slide>
+        <h1 margin>Set {{set.set}} of {{sets.length}}</h1>
+        <p margin><small>Push-ups to perform</small></p>
+        <p margin style="font-size:75px">{{set.reps}}</p>
+        <p margin><img src="assets/activity.svg" style="width:50%"></p>
+      </ion-slide>
+      <ion-slide *ngIf="i < sets.length - 1; else elseBlock">
+        <h1>Rest</h1>
+        <timer seconds="{{set.rest}}" (finished)="onTimerFinished($event)"></timer>
+      </ion-slide>
+      <ng-template #elseBlock>
+        <ion-slide>
+          <h1>Well done!</h1>
+          <ion-icon name="thumbs-up"></ion-icon>
+        </ion-slide>
+      </ng-template>
+    </ng-template>
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <button ion-button full (click)="submit()">{{buttonText}}</button>
+  </ion-toolbar>
+</ion-footer>

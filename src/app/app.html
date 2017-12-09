@@ -1,20 +1,19 @@
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Settings</ion-title>
-      <ion-buttons end>
+      <ion-buttons start>
         <button ion-button icon-only menuToggle>
           <ion-icon name="close"></ion-icon>
         </button>
       </ion-buttons>
+      <ion-title>100 Push-ups</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
     <ion-list>
       <button ion-item (click)="goToHomePage()">Home</button>
-      <button ion-item (click)="goToTestPage()">Test</button>
-      <button ion-item>Reset</button>
+      <button ion-item (click)="clear()">Erase all content and settings</button>
     </ion-list>
   </ion-content>
 </ion-menu>
